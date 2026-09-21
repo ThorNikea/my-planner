@@ -60,8 +60,8 @@ button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}.app{mi
 <a class="link" href="https://www.atlassian.com/software/jira" target="_blank" rel="noopener">Jira <span>›</span></a>
 <a class="link" href="https://www.figma.com/" target="_blank" rel="noopener">Figma <span>›</span></a>
 <a class="link" href="https://www.atlassian.com/software/confluence" target="_blank" rel="noopener">Confluence <span>›</span></a>
-<a class="link zoom-link" href="https://zoom.us/j/93895483809?pwd=AJhDjIhhdNhjLXx4mEYMtOvt0Ht9na.1" target="_blank" rel="noopener"><span>🎥 Casino</span><span>›</span></a>
-<a class="link zoom-link" href="https://zoom.us/j/96323460735?pwd=iTRGW8b4WbK89Yrr9fjXYXQxacgRvu.1" target="_blank" rel="noopener"><span>🎥 Sport</span><span>›</span></a>
+<a class="link zoom-link" href="zoommtg://zoom.us/join?action=join&confno=93895483809&pwd=AJhDjIhhdNhjLXx4mEYMtOvt0Ht9na.1" data-web="https://zoom.us/j/93895483809?pwd=AJhDjIhhdNhjLXx4mEYMtOvt0Ht9na.1" onclick="return openZoom(this)"><span>🎥 Casino</span><span>›</span></a>
+<a class="link zoom-link" href="zoommtg://zoom.us/join?action=join&confno=96323460735&pwd=iTRGW8b4WbK89Yrr9fjXYXQxacgRvu.1" data-web="https://zoom.us/j/96323460735?pwd=iTRGW8b4WbK89Yrr9fjXYXQxacgRvu.1" onclick="return openZoom(this)"><span>🎥 Sport</span><span>›</span></a>
 </div>
 <div class="notes" id="notesCard"><h3 style="font-size:15px;margin:6px 0 8px">📝 Notes</h3><textarea id="notes" placeholder="Quick thoughts, ideas, or anything important..."></textarea></div>
 </section>
@@ -125,6 +125,16 @@ function removeRoad(i){data.roadmap.splice(i,1);persist();renderRoadmap()}
 function openModal(m){mode=m;document.getElementById('modalBack').classList.remove('hidden');let title=m==='task'?'Add task':m==='event'?'Add calendar event':m==='reminder'?'Add reminder':'Add roadmap goal';document.getElementById('modalTitle').textContent=title;let f='';if(m==='task')f='<div class="field"><label>Task</label><input id="f1" autofocus></div><div class="field"><label>Time</label><input id="f2" placeholder="09:00 – 10:00"></div><div class="field"><label>Priority</label><select id="f3"><option>High</option><option>Medium</option><option>Low</option><option>Meeting</option></select></div>';if(m==='event')f='<div class="field"><label>Event</label><input id="f1" autofocus></div><div class="field"><label>Time</label><input id="f2" placeholder="14:00 – 15:00"></div><div class="field"><label>Date</label><input id="f3" type="date" value="'+iso(selectedDate)+'"></div>';if(m==='reminder')f='<div class="field"><label>Reminder</label><input id="f1" autofocus></div><div class="field"><label>Date & time</label><input id="f2" type="datetime-local"></div><div class="field"><label>Priority</label><select id="f3"><option>High</option><option>Medium</option><option>Low</option></select></div>';if(m==='roadmap')f='<div class="field"><label>Goal</label><input id="f1" autofocus></div><div class="field"><label>Status</label><select id="f2"><option>Planned</option><option>In progress</option><option>Done</option></select></div><div class="field"><label>Description</label><textarea id="f3"></textarea></div>';document.getElementById('modalFields').innerHTML=f}
 function closeModal(){document.getElementById('modalBack').classList.add('hidden')}
 function saveModal(){let a=document.getElementById('f1')?.value.trim();if(!a)return;if(mode==='task')data.tasks.push({name:a,time:document.getElementById('f2').value,priority:document.getElementById('f3').value,done:false});if(mode==='event'){let k=document.getElementById('f3').value;if(!data.events[k])data.events[k]=[];data.events[k].push({name:a,time:document.getElementById('f2').value});selectedDate=new Date(k+'T12:00:00');viewDate=new Date(selectedDate.getFullYear(),selectedDate.getMonth(),1)}if(mode==='reminder'){const raw=document.getElementById('f2').value;const dt=new Date(raw);data.reminders.push({name:a,date:dt.toLocaleString(undefined,{dateStyle:'medium',timeStyle:'short'}),datetime:Number.isNaN(dt.getTime())?'':dt.toISOString(),priority:document.getElementById('f3').value});}if(mode==='roadmap')data.roadmap.push({title:a,status:document.getElementById('f2').value,desc:document.getElementById('f3').value});persist();closeModal();renderAll()}
+function openZoom(el){
+  const web=el.dataset.web;
+  let opened=false;
+  try{
+    window.location.href=el.href;
+    opened=true;
+  }catch(e){}
+  setTimeout(()=>{ if(document.visibilityState==='visible' && web) window.location.href=web; },1800);
+  return false;
+}
 function exportBackup(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-planner-backup.json';a.click();URL.revokeObjectURL(a.href)}
 function renderAll(){renderTasks();renderCalendar();renderReminders();renderRoadmap()}renderAll();
 </script></body></html>
