@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>My Planner</title>
+<style>
+:root{--bg:#f5f6ff;--card:#fff;--text:#18215f;--muted:#7884a8;--primary:#6255f5;--line:#e9ebf8;--shadow:0 12px 34px rgba(48,55,110,.09)}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:linear-gradient(135deg,#f8f9ff,#f2f6ff 55%,#faf5ff);color:var(--text)}
+button,input,textarea,select{font:inherit}button{cursor:pointer;border:0}.app{min-height:100vh;display:flex}
+.sidebar{width:230px;background:linear-gradient(180deg,#20265f,#303783);color:#fff;padding:27px 16px;position:fixed;inset:0 auto 0 0}.brand{font-weight:800;font-size:21px;display:flex;align-items:center;gap:10px;margin:0 10px}.brand-icon{width:35px;height:35px;border-radius:11px;background:linear-gradient(135deg,#a895ff,#6e5cf7);display:grid;place-items:center}.tag{font-size:11px;color:#bdc5ec;margin:6px 0 28px 57px}.nav{display:grid;gap:7px}.nav button{color:#e6e8ff;background:transparent;text-align:left;padding:11px 14px;border-radius:12px;display:flex;gap:12px;align-items:center;width:100%}.nav button.active,.nav button:hover{background:rgba(255,255,255,.13);color:#fff}.sidebar-bottom{position:absolute;bottom:22px;left:16px;right:16px}.content{margin-left:230px;width:calc(100% - 230px);padding:30px 34px 45px}.top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px}.hello h1{margin:0;font-size:30px}.hello p{margin:6px 0 0;color:var(--muted)}.version{margin-top:5px;color:#a2accb;font-size:10px}.date-pill{background:#fff;border:1px solid var(--line);padding:10px 14px;border-radius:13px;box-shadow:var(--shadow);font-size:13px}
+.grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(300px,.8fr);gap:18px}.card{background:rgba(255,255,255,.9);border:1px solid rgba(230,232,247,.9);border-radius:20px;box-shadow:var(--shadow);overflow:hidden}.card-head{display:flex;align-items:center;justify-content:space-between;padding:17px 20px;border-bottom:1px solid var(--line)}.card-head h2{margin:0;font-size:17px;display:flex;align-items:center;gap:9px}.badge{font-size:11px;padding:5px 9px;border-radius:999px;background:#eef0ff;color:#6255f5}.add{background:var(--primary);color:#fff;padding:9px 13px;border-radius:10px;font-size:12px}.ghost{background:#f1f2ff;color:#4f46d9;padding:8px 11px;border-radius:9px;font-size:12px}
+.tasks{padding:2px 20px}.task{display:flex;align-items:center;gap:11px;padding:13px 0;border-bottom:1px solid var(--line)}.task:last-child{border-bottom:0}.check{width:21px;height:21px;border:2px solid #adb7d8;border-radius:6px;background:#fff;display:grid;place-items:center;color:#fff;flex:none}.check.done{background:var(--primary);border-color:var(--primary)}.task-name{flex:1;font-size:13px}.task-name.done{text-decoration:line-through;color:#9aa4c2}.time{font-size:11px;color:var(--muted);min-width:92px;text-align:right}.delete-task{background:transparent;color:#a5aec8;font-size:16px;padding:4px 5px;border-radius:7px;opacity:.4}.task:hover .delete-task{opacity:1}.delete-task:hover{background:#fff0f3;color:#e85b76}
+.calendar{padding:14px 18px}.cal-top{display:flex;justify-content:space-between;align-items:center;padding:2px 0 12px}.cal-top strong{font-size:14px}.arrows button{background:transparent;color:#66739d;font-size:18px;padding:2px 7px}.week,.days{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;text-align:center}.week div{font-size:10px;color:#9aa4c2;padding:6px 0}.day{min-height:35px;border-radius:10px;display:grid;place-items:center;font-size:12px;cursor:pointer}.day:hover{background:#f0efff}.day.muted{color:#c4c9db}.day.selected{background:var(--primary);color:#fff}.day.today{box-shadow:inset 0 0 0 2px #dcd9ff}.events{margin-top:12px;border-top:1px solid var(--line);padding-top:11px}.event-row{display:flex;gap:8px;align-items:center;padding:6px 0;font-size:11px}.dot{width:7px;height:7px;border-radius:50%;background:var(--primary);flex:none}.small{font-size:11px;color:var(--muted)}
+.rows .row{padding:12px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px}.rows .row:last-child{border-bottom:0}.reminder-text{flex:1;font-size:12px}
+.roadmap{grid-column:1/-1}.roadmap-body{padding:18px 20px;display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.road-item{border:1px solid var(--line);border-radius:15px;padding:15px;background:linear-gradient(145deg,#fff,#f8f7ff)}.road-item h3{margin:0 0 8px;font-size:14px}.status{font-size:10px;border-radius:999px;padding:4px 7px;background:#eaf9f3;color:#159b6c}.road-item p{margin:8px 0 0;font-size:12px;color:var(--muted)}.quick{padding:8px 18px 15px}.link{padding:10px 12px;background:#f7f8ff;border:1px solid #edf0fa;border-radius:11px;margin-top:8px;font-size:12px;display:flex;justify-content:space-between;text-decoration:none;color:var(--text);transition:.15s}.link:hover{background:#eef0ff;transform:translateY(-1px)}.zoom-link{background:linear-gradient(135deg,#f3f0ff,#eef5ff);font-weight:600}.notes{padding:5px 18px 16px}.notes textarea{width:100%;min-height:100px;border:1px solid var(--line);border-radius:12px;padding:11px;resize:vertical;outline:none;background:#fbfbff}
+.modal-back{position:fixed;inset:0;background:rgba(18,23,62,.35);backdrop-filter:blur(5px);display:grid;place-items:center;padding:20px;z-index:10}.hidden{display:none!important}.modal{width:min(450px,100%);background:#fff;border-radius:20px;padding:22px;box-shadow:0 25px 70px rgba(20,24,70,.22)}.modal h3{margin:0 0 14px}.field{margin:10px 0}.field label{display:block;font-size:11px;color:var(--muted);margin-bottom:5px}.field input,.field textarea,.field select{width:100%;border:1px solid var(--line);border-radius:10px;padding:10px;outline:none}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}.cancel{background:#f0f1fa;color:#59658d;padding:10px 14px;border-radius:10px}.save{background:var(--primary);color:#fff;padding:10px 14px;border-radius:10px}
+@media(max-width:1000px){.sidebar{width:190px}.content{margin-left:190px;width:calc(100% - 190px);padding:22px}.grid{grid-template-columns:1fr}.roadmap{grid-column:auto}.roadmap-body{grid-template-columns:1fr 1fr}}
+@media(max-width:700px){.sidebar{position:static;width:100%;height:auto;padding:16px}.app{display:block}.sidebar-bottom{display:none}.nav{grid-template-columns:repeat(4,1fr)}.nav button{justify-content:center}.nav button span:last-child{display:none}.content{margin:0;width:100%;padding:18px}.hello h1{font-size:24px}.top{gap:10px}.roadmap-body{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="app">
+<aside class="sidebar">
+<div class="brand"><div class="brand-icon">✦</div> My Planner</div>
+<div class="tag">Plan · Focus · Achieve</div>
+<nav class="nav">
+<button class="active" onclick="scrollToId('tasksCard')"><span>⌂</span><span>Home</span></button>
+<button onclick="scrollToId('tasksCard')"><span>☑</span><span>Tasks</span></button>
+<button onclick="scrollToId('calendarCard')"><span>▣</span><span>Calendar</span></button>
+<button onclick="scrollToId('remindersCard')"><span>♧</span><span>Reminders</span></button>
+<button onclick="scrollToId('roadmapCard')"><span>◇</span><span>Roadmap</span></button>
+<button onclick="scrollToId('notesCard')"><span>▤</span><span>Notes</span></button>
+</nav>
+<div class="sidebar-bottom">
+<button class="nav" onclick="exportBackup()"><span>⇩</span><span>Backup data</span></button>
+</div>
+</aside>
+<main class="content">
+<div class="top">
+<div class="hello"><h1>Good evening, Tornike 👋</h1><p>Here's what's on your plate today. Keep going!</p><div class="version">My Planner · live</div></div>
+<div class="date-pill" id="headerDate"></div>
+</div>
+<div class="grid">
+<section class="card" id="tasksCard">
+<div class="card-head"><h2>☑ Today's Tasks <span class="badge" id="taskCount"></span></h2><button class="add" onclick="openModal('task')">＋ Add task</button></div>
+<div class="tasks" id="taskList"></div></section>
+<section class="card" id="calendarCard">
+<div class="card-head"><h2>▣ Calendar</h2><button class="ghost" onclick="openModal('event')">＋ Add event</button></div>
+<div class="calendar">
+<div class="cal-top"><strong id="monthLabel"></strong><div class="arrows"><button onclick="changeMonth(-1)">‹</button><button onclick="changeMonth(1)">›</button></div></div>
+<div class="week"><div>Mon</div><div>Tue</div><div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div><div>Sun</div></div>
+<div class="days" id="days"></div><div class="events"><div class="small" id="selectedLabel"></div><div id="eventList"></div></div>
+</div></section>
+<section class="card rows" id="remindersCard">
+<div class="card-head"><h2>♧ Reminders</h2><button class="ghost" onclick="openModal('reminder')">＋ Add</button></div>
+<div id="reminderList"></div></section>
+<section class="card">
+<div class="card-head"><h2>🔗 Quick Links</h2></div>
+<div class="quick">
+<a class="link" href="https://www.atlassian.com/software/jira" target="_blank" rel="noopener">Jira <span>›</span></a>
+<a class="link" href="https://www.figma.com/" target="_blank" rel="noopener">Figma <span>›</span></a>
+<a class="link" href="https://www.atlassian.com/software/confluence" target="_blank" rel="noopener">Confluence <span>›</span></a>
+<a class="link zoom-link" href="https://zoom.us/" target="_blank" rel="noopener"><span>🎥 Casino</span><span>›</span></a>
+<a class="link zoom-link" href="https://zoom.us/" target="_blank" rel="noopener"><span>🎥 Sport</span><span>›</span></a>
+</div>
+<div class="notes" id="notesCard"><h3 style="font-size:15px;margin:6px 0 8px">📝 Notes</h3><textarea id="notes" placeholder="Quick thoughts, ideas, or anything important..."></textarea></div>
+</section>
+<section class="card roadmap" id="roadmapCard">
+<div class="card-head"><h2>◇ Roadmap <span class="badge">All goals</span></h2><button class="add" onclick="openModal('roadmap')">＋ Add goal</button></div>
+<div class="roadmap-body" id="roadmapList"></div></section>
+</div>
+</main></div>
+<div class="modal-back hidden" id="modalBack" onclick="if(event.target===this)closeModal()"><div class="modal"><h3 id="modalTitle"></h3><div id="modalFields"></div><div class="modal-actions"><button class="cancel" onclick="closeModal()">Cancel</button><button class="save" onclick="saveModal()">Save</button></div></div></div>
+<script>
+const today=new Date();let viewDate=new Date(today.getFullYear(),today.getMonth(),1),selectedDate=new Date(today.getFullYear(),today.getMonth(),today.getDate()),mode='';
+const storeKey='my-planner-v1';
+let data=JSON.parse(localStorage.getItem(storeKey)||'null')||{tasks:[{name:'Finish promo dashboard UI updates',time:'09:00 – 11:00',priority:'High',done:true},{name:'Daily standup',time:'11:00 – 11:15',priority:'Meeting',done:true},{name:'Review PRs',time:'13:00 – 14:00',priority:'Medium',done:false},{name:'Prepare retro notes',time:'16:30 – 17:00',priority:'Medium',done:false}],reminders:[{name:'Code review deadline',date:'Today, 15:00',priority:'High'},{name:'Monthly retro',date:'Tomorrow, 16:00',priority:'Medium'}],events:{},roadmap:[{title:'New Website',status:'In progress',desc:'Design, development and launch'},{title:'Promo Dashboard',status:'Planned',desc:'Improve visibility and reporting'},{title:'Team Improvements',status:'Planned',desc:'Small changes that make daily work easier'}],notes:''};
+function persist(){localStorage.setItem(storeKey,JSON.stringify(data))}
+function iso(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function scrollToId(id){document.getElementById(id)?.scrollIntoView({behavior:'smooth'})}
+document.getElementById('headerDate').textContent=today.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric',year:'numeric'});
+document.getElementById('notes').value=data.notes;document.getElementById('notes').addEventListener('input',e=>{data.notes=e.target.value;persist()});
+function renderTasks(){let box=document.getElementById('taskList'),done=0;box.innerHTML='';data.tasks.forEach((t,i)=>{if(t.done)done++;let el=document.createElement('div');el.className='task';el.innerHTML='<button class="check '+(t.done?'done':'')+'" onclick="toggleTask('+i+')">'+(t.done?'✓':'')+'</button><div class="task-name '+(t.done?'done':'')+'">'+esc(t.name)+'</div><span class="badge">'+esc(t.priority||'Normal')+'</span><span class="time">'+esc(t.time||'')+'</span><button class="delete-task" title="Delete task" onclick="deleteTask('+i+')">✕</button>';box.appendChild(el)});document.getElementById('taskCount').textContent=done+' / '+data.tasks.length}
+function toggleTask(i){data.tasks[i].done=!data.tasks[i].done;persist();renderTasks()}
+function deleteTask(i){if(!confirm('Delete this task?'))return;data.tasks.splice(i,1);persist();renderTasks()}
+function renderCalendar(){let y=viewDate.getFullYear(),m=viewDate.getMonth(),first=new Date(y,m,1),start=(first.getDay()+6)%7,last=new Date(y,m+1,0).getDate();document.getElementById('monthLabel').textContent=viewDate.toLocaleDateString(undefined,{month:'long',year:'numeric'});let days=document.getElementById('days');days.innerHTML='';for(let i=0;i<start;i++){let el=document.createElement('div');el.className='day muted';el.textContent=new Date(y,m,0).getDate()-start+i+1;days.appendChild(el)}for(let n=1;n<=last;n++){let d=new Date(y,m,n),el=document.createElement('div');el.className='day';if(iso(d)===iso(today))el.classList.add('today');if(iso(d)===iso(selectedDate))el.classList.add('selected');el.textContent=n;el.onclick=()=>{selectedDate=d;renderCalendar()};days.appendChild(el)}renderEvents()}
+function renderEvents(){let k=iso(selectedDate),list=data.events[k]||[],box=document.getElementById('eventList');document.getElementById('selectedLabel').textContent=selectedDate.toLocaleDateString(undefined,{weekday:'short',month:'short',day:'numeric'});box.innerHTML='';if(!list.length){box.innerHTML='<div class="small" style="padding-top:7px">No events. Add something to this date.</div>';return}list.forEach(e=>{let el=document.createElement('div');el.className='event-row';el.innerHTML='<span class="dot"></span><b>'+esc(e.time||'')+'</b><span>'+esc(e.name)+'</span>';box.appendChild(el)})}
+function changeMonth(delta){viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()+delta,1);renderCalendar()}
+function renderReminders(){let box=document.getElementById('reminderList');box.innerHTML='';data.reminders.forEach(r=>{let el=document.createElement('div');el.className='row';el.innerHTML='<span style="font-size:16px">○</span><div class="reminder-text"><div>'+esc(r.name)+'</div><div class="small">'+esc(r.date||'')+'</div></div><span class="badge">'+esc(r.priority||'')+'</span>';box.appendChild(el)})}
+function renderRoadmap(){let box=document.getElementById('roadmapList');box.innerHTML='';data.roadmap.forEach((r,i)=>{let el=document.createElement('div');el.className='road-item';el.innerHTML='<div style="display:flex;justify-content:space-between;gap:8px"><h3>'+esc(r.title)+'</h3><span class="status">'+esc(r.status)+'</span></div><p>'+esc(r.desc||'')+'</p><button class="ghost" style="margin-top:11px" onclick="removeRoad('+i+')">Remove</button>';box.appendChild(el)})}
+function removeRoad(i){data.roadmap.splice(i,1);persist();renderRoadmap()}
+function openModal(m){mode=m;document.getElementById('modalBack').classList.remove('hidden');let title=m==='task'?'Add task':m==='event'?'Add calendar event':m==='reminder'?'Add reminder':'Add roadmap goal';document.getElementById('modalTitle').textContent=title;let f='';if(m==='task')f='<div class="field"><label>Task</label><input id="f1" autofocus></div><div class="field"><label>Time</label><input id="f2" placeholder="09:00 – 10:00"></div><div class="field"><label>Priority</label><select id="f3"><option>High</option><option>Medium</option><option>Low</option><option>Meeting</option></select></div>';if(m==='event')f='<div class="field"><label>Event</label><input id="f1" autofocus></div><div class="field"><label>Time</label><input id="f2" placeholder="14:00 – 15:00"></div><div class="field"><label>Date</label><input id="f3" type="date" value="'+iso(selectedDate)+'"></div>';if(m==='reminder')f='<div class="field"><label>Reminder</label><input id="f1" autofocus></div><div class="field"><label>When</label><input id="f2" placeholder="Tomorrow, 15:00"></div><div class="field"><label>Priority</label><select id="f3"><option>High</option><option>Medium</option><option>Low</option></select></div>';if(m==='roadmap')f='<div class="field"><label>Goal</label><input id="f1" autofocus></div><div class="field"><label>Status</label><select id="f2"><option>Planned</option><option>In progress</option><option>Done</option></select></div><div class="field"><label>Description</label><textarea id="f3"></textarea></div>';document.getElementById('modalFields').innerHTML=f}
+function closeModal(){document.getElementById('modalBack').classList.add('hidden')}
+function saveModal(){let a=document.getElementById('f1')?.value.trim();if(!a)return;if(mode==='task')data.tasks.push({name:a,time:document.getElementById('f2').value,priority:document.getElementById('f3').value,done:false});if(mode==='event'){let k=document.getElementById('f3').value;if(!data.events[k])data.events[k]=[];data.events[k].push({name:a,time:document.getElementById('f2').value});selectedDate=new Date(k+'T12:00:00');viewDate=new Date(selectedDate.getFullYear(),selectedDate.getMonth(),1)}if(mode==='reminder')data.reminders.push({name:a,date:document.getElementById('f2').value,priority:document.getElementById('f3').value});if(mode==='roadmap')data.roadmap.push({title:a,status:document.getElementById('f2').value,desc:document.getElementById('f3').value});persist();closeModal();renderAll()}
+function exportBackup(){let blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='my-planner-backup.json';a.click();URL.revokeObjectURL(a.href)}
+function renderAll(){renderTasks();renderCalendar();renderReminders();renderRoadmap()}renderAll();
+</script></body></html>
